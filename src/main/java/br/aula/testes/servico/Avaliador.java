@@ -9,11 +9,18 @@ import br.aula.testes.models.Lance;
 import br.aula.testes.models.Leilao;
 
 public class Avaliador {
+
 	private double maiorDeTodos = Double.NEGATIVE_INFINITY;
 	private double menorDeTodos = Double.POSITIVE_INFINITY;
+
 	private List<Lance> maiores;
 
 	public void avalia(Leilao leilao) {
+
+		// lancando a excecao
+		if (leilao.getLances().size() == 0) {
+			throw new RuntimeException("Não é possível avaliar um leilão sem lances");
+		}
 
 		for (Lance lance : leilao.getLances()) {
 			if (lance.getValor() > maiorDeTodos) {

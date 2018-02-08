@@ -10,6 +10,9 @@ import br.banco.dominio.Banco;
 import br.banco.dominio.Conta;
 import br.banco.dominio.Usuario;
 
+import static org.mockito.Mockito.*;
+
+
 public class BancoTest {
 
 	private Conta c1;
@@ -28,10 +31,15 @@ public class BancoTest {
 	@Test
 	public void deveSomarTodasAsContasTrazendoOSaldoDoBanco() {
 		List<Conta> contas = new ContaBuilder().addConta(c1, joao).addConta(c2, manoel).constroi();
-		ContaDao dao = new ContaDao();
+		
+		ContaDao dao = mock(ContaDao.class);
+		when(dao.getContas()).thenReturn(contas);
+		
 		dao.salvaConta(contas.get(0));
 		dao.salvaConta(contas.get(1));
-		Banco banco = new Banco();
+		
+		Banco banco = new Banco(dao);
+		
 		assertEquals(2, banco.getContas().size(), 0.00001);
 		assertEquals(300, banco.totalSaldo(), 0.00001);
 	}

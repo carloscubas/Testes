@@ -2,15 +2,14 @@ package br.banco.dominio;
 
 import java.util.List;
 import br.banco.dao.ContaDao;
-import br.banco.dao.ContaDaoFalso;
 import br.banco.dominio.Conta;
 
 public class Banco {
-	private ContaDaoFalso dao;
+	private ContaDao dao;
 	private List<Conta> contas;
 
-	public Banco() {
-		this.dao = new ContaDaoFalso();
+	public Banco(ContaDao dao) {
+		this.dao = dao;
 		this.contas = dao.getContas();
 	}
 

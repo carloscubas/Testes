@@ -7,8 +7,7 @@ public class Conta {
 	private String tipoConta;
 	private Usuario usuario;
 
-	public Conta() {
-	}
+	public Conta() { }
 
 	public Conta(double saldo, String tipoConta) {
 		this.saldo = saldo;

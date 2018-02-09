@@ -1,5 +1,6 @@
 package br.banco.dominio;
 
+import java.util.Calendar;
 import java.util.List;
 import br.banco.dao.ContaDao;
 import br.banco.dominio.Conta;
@@ -7,17 +8,30 @@ import br.banco.dominio.Conta;
 public class Banco {
 	private ContaDao dao;
 	private List<Conta> contas;
+	private Notificador notificador;
 
 	public Banco(ContaDao dao) {
 		this.dao = dao;
 		this.contas = dao.getContas();
 	}
 
+	public Banco(ContaDao dao, Notificador notificador) {
+		this.dao = dao;
+		this.notificador = notificador;
+		this.contas = this.dao.getContas();
+	}
+
 	public void atualizaJuros(double indice) {
 		for (Conta c : this.contas) {
-			double dividendo = c.getSaldo() + (indice * c.getSaldo() / 100);
-			c.deposito(dividendo);
-			this.dao.atualizaConta(c);
+
+			try {
+				double dividendo = c.getSaldo() + (indice * c.getSaldo() / 100);
+				c.deposito(dividendo);
+				this.dao.atualizaConta(c);
+			} catch (Exception e) {
+				System.out.println("lançou uma excecao");
+			}
+
 		}
 	}
 
@@ -31,5 +45,13 @@ public class Banco {
 
 	public List<Conta> getContas() {
 		return contas;
+	}
+
+	public void notificaDiretoria() {
+		Notificacao notificacao = new Notificacao(Calendar.getInstance());
+		for (Conta c : this.contas) {
+			notificacao.addContas(c);
+		}
+		notificador.gera(notificacao);
 	}
 }

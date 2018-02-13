@@ -22,6 +22,9 @@ public class ContaSystemTest {
 		this.driver = new ChromeDriver();
 		this.contas = new ContasPage(driver);
 		
+		// limpa a base de dados
+		driver.get("http://localhost:8080/reset");
+		
 		CorrentistaPage correntista = new CorrentistaPage(driver);
 		correntista.visita();
 		correntista.novo().cadastra("Bill Gates", "billgates@microssoft.com");
@@ -38,6 +41,18 @@ public class ContaSystemTest {
 		
 		assertTrue(contas.existe(3000, "Bill Gates", true));
 		
+	}
+	
+	@Test
+	public void deveCadastrarUmMovimento(){
+	
+		contas.visita();
+		NovaContaPage novaConta = contas.novo();
+		novaConta.preenche("Bill Gates", 3000, true);
+		
+		DetalheDaContaPage historicos = contas.historico(1);
+		historicos.movimento("Crédito", 3000.0, "Viagem");
+		assertTrue(historicos.existeHistorico("Crédito", 3000.0, "Viagem"));
 	}
 	
 	@After

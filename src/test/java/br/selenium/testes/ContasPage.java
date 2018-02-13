@@ -1,7 +1,10 @@
 package br.selenium.testes;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 public class ContasPage {
 	
@@ -29,5 +32,12 @@ public class ContasPage {
         return driver.getPageSource().contains(correntista) && 
                 driver.getPageSource().contains(String.valueOf(valor)) &&
                 driver.getPageSource().contains(eUmaContaPremiun ? "PREMIUN" : "BÁSICA");
+    }
+	
+	public DetalheDaContaPage historico(int posicao) {
+        List<WebElement> elementos = driver.findElements(By.linkText("Históricos"));
+        elementos.get(posicao - 1).click();
+
+        return new DetalheDaContaPage(driver);
     }
 }
